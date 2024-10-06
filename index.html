@@ -1,0 +1,520 @@
+<html><head><base href="https://baby-age-tracker.com/"><title>גיל התינוקת היקרה שלי</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+    :root {
+        --primary-color: #ff69b4;
+        --secondary-color: #4b0082;
+        --background-color: #f0f8ff;
+        --card-color: rgba(255, 255, 255, 0.9);
+        --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+        font-family: 'Varela Round', sans-serif;
+        background: var(--background-color);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        direction: rtl;
+        padding: 20px;
+        transition: background-color 0.5s ease;
+    }
+
+    .container {
+        background-color: var(--card-color);
+        border-radius: 20px;
+        padding: 60px 40px 40px; /* Increased top padding */
+        box-shadow: 0 10px 30px var(--shadow-color);
+        text-align: center;
+        max-width: 800px;
+        width: 90%;
+        position: relative;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 4px var(--shadow-color);
+    }
+
+    #age {
+        font-size: 1.2em;
+        color: var(--secondary-color);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        flex-direction: row-reverse;
+    }
+
+    .age-unit {
+        background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+        border-radius: 15px;
+        padding: 15px;
+        margin: 10px;
+        min-width: 120px;
+        box-shadow: 0 4px 6px var(--shadow-color);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .age-unit:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+
+    .number {
+        font-weight: bold;
+        font-size: 2em;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .unit {
+        font-size: 1em;
+        color: #555;
+    }
+
+    .menu-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .menu-button:hover {
+        transform: rotate(90deg);
+    }
+
+    .menu {
+        position: absolute;
+        top: 40px;
+        right: 10px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 6px var(--shadow-color);
+        display: none;
+        text-align: right;
+        z-index: 100;
+    }
+
+    .menu label {
+        display: block;
+        margin: 10px 0;
+        cursor: pointer;
+    }
+
+    .menu input[type="checkbox"] {
+        margin-left: 10px;
+    }
+
+    #congratsButton {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 30px;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        box-shadow: 0 4px 6px var(--shadow-color);
+    }
+
+    #congratsButton:hover {
+        background-color: #ff1493;
+        transform: scale(1.05);
+        box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+    }
+
+    @keyframes floatingHeart {
+        0% { transform: translateY(0) scale(0); opacity: 0; }
+        50% { transform: translateY(-100px) scale(1); opacity: 1; }
+        100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
+    }
+
+    .heart {
+        position: fixed;
+        font-size: 30px;
+        color: var(--primary-color);
+        pointer-events: none;
+        animation: floatingHeart 2s ease-out;
+    }
+
+    #totalHours {
+        margin-top: 20px;
+        font-size: 1.2em;
+        color: var(--secondary-color);
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px var(--shadow-color);
+    }
+
+    .theme-toggle {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+        transform: rotate(360deg);
+    }
+
+    .dark-theme {
+        --background-color: #2c3e50;
+        --card-color: rgba(52, 73, 94, 0.9);
+        --shadow-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .dark-theme h1,
+    .dark-theme .unit,
+    .dark-theme #totalHours,
+    .dark-theme #milestone {
+        color: #ecf0f1;
+    }
+
+    .dark-theme .age-unit {
+        background: linear-gradient(45deg, #3498db 0%, #2980b9 100%);
+    }
+
+    .dark-theme .menu,
+    .dark-theme #totalHours,
+    .dark-theme #milestone {
+        background-color: #34495e;
+        color: #ecf0f1;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        .age-unit {
+            min-width: 100px;
+            padding: 10px;
+        }
+
+        .number {
+            font-size: 1.5em;
+        }
+
+        .unit {
+            font-size: 0.9em;
+        }
+    }
+
+    #milestone {
+        margin-top: 20px;
+        font-size: 1.2em;
+        color: var(--secondary-color);
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px var(--shadow-color);
+        transition: all 0.3s ease;
+    }
+
+    #milestone:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+
+    #growthChart, #milestoneTimeline {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: var(--card-color);
+        border-radius: 15px;
+        box-shadow: 0 4px 6px var(--shadow-color);
+    }
+
+    .chart-bar {
+        height: 20px;
+        background-color: var(--primary-color);
+        border-radius: 10px;
+        position: relative;
+        transition: width 1s ease-in-out;
+    }
+
+    .chart-bar span {
+        position: absolute;
+        right: 5px;
+        top: 0;
+        color: white;
+    }
+
+    .timeline {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .timeline li {
+        padding: 10px;
+        border-left: 2px solid var(--secondary-color);
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+    .timeline li::before {
+        content: '';
+        width: 12px;
+        height: 12px;
+        background-color: var(--secondary-color);
+        border-radius: 50%;
+        position: absolute;
+        left: -7px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .timeline li.passed {
+        border-left-color: var(--primary-color);
+    }
+
+    .timeline li.passed::before {
+        background-color: var(--primary-color);
+    }
+
+    #trackerLog ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    #trackerLog li {
+        margin-bottom: 5px;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <button class="menu-button" onclick="toggleMenu()">⋮</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+        <div class="menu" id="menu">
+            <label><input type="checkbox" id="showZeros" onchange="updateAge()"> הצג ערכי אפס</label>
+            <label><input type="checkbox" id="showTotalHours" onchange="updateAge()"> הצג סך הכל שעות</label>
+            <label><input type="checkbox" id="showMilestone" onchange="updateAge()"> הצג אבן דרך הבאה</label>
+        </div>
+        <h1>הגיל של התינוקת היקרה שלי</h1>
+        <div id="age"></div>
+        <div id="totalHours"></div>
+        <div id="milestone"></div>
+        <div id="growthChart"></div>
+        <div id="milestoneTimeline"></div>
+    </div>
+
+    <button id="congratsButton" onclick="congratulate()">לחיצה כאן לאיחול מזל טוב</button>
+
+    <script>
+        const birthDate = new Date('2024-10-04T13:50:00');
+
+        function updateAge() {
+            const now = new Date();
+            const diff = now - birthDate;
+
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            let ageString = '';
+
+            const showZeros = document.getElementById('showZeros').checked;
+
+            const units = [
+                { value: years, label: 'שנים' },
+                { value: months, label: 'חודשים' },
+                { value: days, label: 'ימים' },
+                { value: hours, label: 'שעות' },
+                { value: minutes, label: 'דקות' },
+                { value: seconds, label: 'שניות' }
+            ];
+
+            for (let i = 0; i < units.length; i++) {
+                if (showZeros || units[i].value > 0 || i >= units.length - 2) {
+                    ageString += createAgeUnit(units[i].value, units[i].label);
+                }
+            }
+
+            document.getElementById('age').innerHTML = ageString;
+
+            const showTotalHours = document.getElementById('showTotalHours').checked;
+            const totalHours = Math.floor(diff / (1000 * 60 * 60));
+            const totalHoursElement = document.getElementById('totalHours');
+            if (showTotalHours) {
+                totalHoursElement.innerHTML = `סך הכל שעות: ${totalHours}`;
+                totalHoursElement.style.display = 'block';
+            } else {
+                totalHoursElement.style.display = 'none';
+            }
+
+            const showMilestone = document.getElementById('showMilestone').checked;
+            const milestoneElement = document.getElementById('milestone');
+            if (showMilestone) {
+                const nextMilestone = getNextMilestone(now);
+                milestoneElement.innerHTML = `אבן הדרך הבאה: ${nextMilestone.description} (${formatTimeLeft(nextMilestone.date - now)})`;
+                milestoneElement.style.display = 'block';
+            } else {
+                milestoneElement.style.display = 'none';
+            }
+        }
+
+        function createAgeUnit(value, unit) {
+            return `<div class="age-unit">
+                        <span class="number">${value}</span>
+                        <span class="unit">${unit}</span>
+                    </div>`;
+        }
+
+        function getNextMilestone(now) {
+            const milestones = [
+                  { date: new Date(birthDate.getTime() + 30 * 24 * 60 * 60 * 1000), description: "חודש ראשון" },
+                { date: new Date(birthDate.getTime() + 100 * 24 * 60 * 60 * 1000), description: "100 ימים" },
+                { date: new Date(birthDate.getTime() + 6 * 30 * 24 * 60 * 60 * 1000), description: "חצי שנה" },
+                { date: new Date(birthDate.getTime() + 365 * 24 * 60 * 60 * 1000), description: "יום הולדת ראשון" },
+            ];
+
+            for (let milestone of milestones) {
+                if (milestone.date > now) {
+                    return milestone;
+                }
+            }
+
+            return { date: new Date(birthDate.getFullYear() + 2, birthDate.getMonth(), birthDate.getDate()), description: "יום הולדת שני" };
+        }
+
+        function formatTimeLeft(timeLeft) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+            return `${days} ימים, ${hours} שעות, ${minutes} דקות`;
+        }
+
+        let menuVisible = false;
+
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menuVisible = !menuVisible;
+            menu.style.display = menuVisible ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('menu');
+            const menuButton = document.querySelector('.menu-button');
+            if (menuVisible && !menu.contains(event.target) && event.target !== menuButton) {
+                menuVisible = false;
+                menu.style.display = 'none';
+            }
+        });
+
+        function congratulate() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = `${Math.random() * 100}%`;
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 2000);
+                }, i * 200);
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+        }
+
+        document.getElementById('showZeros').checked = false;
+        document.getElementById('showTotalHours').checked = false;
+        document.getElementById('showMilestone').checked = false;
+
+        updateGrowthChart();
+        updateMilestoneTimeline();
+        updateAllFeatures();
+        setInterval(updateAllFeatures, 1000);
+
+        // Growth chart visualization
+        function updateGrowthChart() {
+            const months = Math.floor((new Date() - birthDate) / (1000 * 60 * 60 * 24 * 30.44));
+            const expectedHeight = 50 + (months * 2); // Simplified growth calculation
+            const chartHtml = `
+                <h3>תרשים גדילה</h3>
+                <div class="chart-bar" style="width: ${expectedHeight}px;">
+                    <span>${expectedHeight} ס"מ</span>
+                </div>
+            `;
+            document.getElementById('growthChart').innerHTML = chartHtml;
+        }
+
+        // Milestone timeline
+        function updateMilestoneTimeline() {
+            const milestones = [
+                { age: 0, description: "לידה" },
+                { age: 1, description: "חיוך ראשון" },
+                { age: 3, description: "הרמת ראש" },
+                { age: 6, description: "התהפכות" },
+                { age: 9, description: "זחילה" },
+                { age: 12, description: "הליכה ראשונה" }
+            ];
+            
+            const ageInMonths = Math.floor((new Date() - birthDate) / (1000 * 60 * 60 * 24 * 30.44));
+            let timelineHtml = '<h3>ציר זמן התפתחותי</h3><ul class="timeline">';
+            
+            milestones.forEach(milestone => {
+                const passed = ageInMonths >= milestone.age;
+                timelineHtml += `
+                    <li class="${passed ? 'passed' : ''}">
+                        <span class="age">${milestone.age} חודשים</span>
+                        <span class="description">${milestone.description}</span>
+                    </li>
+                `;
+            });
+            
+            timelineHtml += '</ul>';
+            document.getElementById('milestoneTimeline').innerHTML = timelineHtml;
+        }
+
+        function updateAllFeatures() {
+            updateAge();
+            updateGrowthChart();
+            updateMilestoneTimeline();
+        }
+        
+        document.getElementById('showZeros').checked = false;
+        document.getElementById('showTotalHours').checked = false;
+        document.getElementById('showMilestone').checked = false;
+
+        updateAllFeatures();
+        setInterval(updateAllFeatures, 1000);
+    </script>
+</body></html>
