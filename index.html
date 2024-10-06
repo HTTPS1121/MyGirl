@@ -29,7 +29,7 @@
     .container {
         background-color: var(--card-color);
         border-radius: 20px;
-        padding: 60px 40px 40px; /* Increased top padding */
+        padding: 60px 40px 40px;
         box-shadow: 0 10px 30px var(--shadow-color);
         text-align: center;
         max-width: 800px;
@@ -245,27 +245,12 @@
         box-shadow: 0 6px 8px rgba(0,0,0,0.15);
     }
 
-    #growthChart, #milestoneTimeline {
+    #milestoneTimeline {
         margin-top: 20px;
         padding: 15px;
         background-color: var(--card-color);
         border-radius: 15px;
         box-shadow: 0 4px 6px var(--shadow-color);
-    }
-
-    .chart-bar {
-        height: 20px;
-        background-color: var(--primary-color);
-        border-radius: 10px;
-        position: relative;
-        transition: width 1s ease-in-out;
-    }
-
-    .chart-bar span {
-        position: absolute;
-        right: 5px;
-        top: 0;
-        color: white;
     }
 
     .timeline {
@@ -323,7 +308,6 @@
         <div id="age"></div>
         <div id="totalHours"></div>
         <div id="milestone"></div>
-        <div id="growthChart"></div>
         <div id="milestoneTimeline"></div>
     </div>
 
@@ -417,6 +401,29 @@
             return `${days} ימים, ${hours} שעות, ${minutes} דקות`;
         }
 
+        function updateMilestoneTimeline() {
+            const now = new Date();
+            const milestones = [
+                { date: new Date(birthDate.getTime() + 30 * 24 * 60 * 60 * 1000), description: "חודש ראשון" },
+                { date: new Date(birthDate.getTime() + 100 * 24 * 60 * 60 * 1000), description: "100 ימים" },
+                { date: new Date(birthDate.getTime() + 6 * 30 * 24 * 60 * 60 * 1000), description: "חצי שנה" },
+                { date: new Date(birthDate.getTime() + 365 * 24 * 60 * 60 * 1000), description: "יום הולדת ראשון" },
+            ];
+
+            let timelineHTML = '<ul class="timeline">';
+            milestones.forEach(milestone => {
+                const isPassed = now > milestone.date;
+                timelineHTML += `
+                    <li class="${isPassed ? 'passed' : ''}">
+                        ${milestone.description}: ${milestone.date.toLocaleDateString('he-IL')}
+                    </li>
+                `;
+            });
+            timelineHTML += '</ul>';
+
+            document.getElementById('milestoneTimeline').innerHTML = timelineHTML;
+        }
+
         let menuVisible = false;
 
         function toggleMenu() {
@@ -458,63 +465,12 @@
         document.getElementById('showTotalHours').checked = false;
         document.getElementById('showMilestone').checked = false;
 
-        updateGrowthChart();
-        updateMilestoneTimeline();
         updateAllFeatures();
         setInterval(updateAllFeatures, 1000);
-
-        // Growth chart visualization
-        function updateGrowthChart() {
-            const months = Math.floor((new Date() - birthDate) / (1000 * 60 * 60 * 24 * 30.44));
-            const expectedHeight = 50 + (months * 2); // Simplified growth calculation
-            const chartHtml = `
-                <h3>תרשים גדילה</h3>
-                <div class="chart-bar" style="width: ${expectedHeight}px;">
-                    <span>${expectedHeight} ס"מ</span>
-                </div>
-            `;
-            document.getElementById('growthChart').innerHTML = chartHtml;
-        }
-
-        // Milestone timeline
-        function updateMilestoneTimeline() {
-            const milestones = [
-                { age: 0, description: "לידה" },
-                { age: 1, description: "חיוך ראשון" },
-                { age: 3, description: "הרמת ראש" },
-                { age: 6, description: "התהפכות" },
-                { age: 9, description: "זחילה" },
-                { age: 12, description: "הליכה ראשונה" }
-            ];
-            
-            const ageInMonths = Math.floor((new Date() - birthDate) / (1000 * 60 * 60 * 24 * 30.44));
-            let timelineHtml = '<h3>ציר זמן התפתחותי</h3><ul class="timeline">';
-            
-            milestones.forEach(milestone => {
-                const passed = ageInMonths >= milestone.age;
-                timelineHtml += `
-                    <li class="${passed ? 'passed' : ''}">
-                        <span class="age">${milestone.age} חודשים</span>
-                        <span class="description">${milestone.description}</span>
-                    </li>
-                `;
-            });
-            
-            timelineHtml += '</ul>';
-            document.getElementById('milestoneTimeline').innerHTML = timelineHtml;
-        }
 
         function updateAllFeatures() {
             updateAge();
-            updateGrowthChart();
             updateMilestoneTimeline();
         }
-        
-        document.getElementById('showZeros').checked = false;
-        document.getElementById('showTotalHours').checked = false;
-        document.getElementById('showMilestone').checked = false;
-
-        updateAllFeatures();
-        setInterval(updateAllFeatures, 1000);
     </script>
 </body></html>
