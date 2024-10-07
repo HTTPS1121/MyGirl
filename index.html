@@ -1,4 +1,4 @@
-<html><head><base href="https://baby-age-tracker.com/"><title>גיל התינוקת היקרה שלי</title>
+<html><head><base href="https://baby-age-tracker.com/"><title>הגיל של מיקה היקרה שלי</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -29,7 +29,7 @@
     .container {
         background-color: var(--card-color);
         border-radius: 20px;
-        padding: 60px 40px 40px;
+        padding: 80px 40px 40px; /* Increased top padding */
         box-shadow: 0 10px 30px var(--shadow-color);
         text-align: center;
         max-width: 800px;
@@ -44,6 +44,14 @@
         margin-bottom: 30px;
         font-size: 2.5em;
         text-shadow: 2px 2px 4px var(--shadow-color);
+    }
+
+    .intro-text, .birth-info {
+        color: var(--secondary-color);
+        margin: 15px 0;
+        font-size: 1.1em;
+        transition: color 0.3s ease;
+        line-height: 1.5;
     }
 
     #age {
@@ -191,7 +199,9 @@
     .dark-theme h1,
     .dark-theme .unit,
     .dark-theme #totalHours,
-    .dark-theme #milestone {
+    .dark-theme #milestone,
+    .dark-theme .intro-text,
+    .dark-theme .birth-info {
         color: #ecf0f1;
     }
 
@@ -244,71 +254,26 @@
         transform: translateY(-5px);
         box-shadow: 0 6px 8px rgba(0,0,0,0.15);
     }
-
-    #milestoneTimeline {
-        margin-top: 20px;
-        padding: 15px;
-        background-color: var(--card-color);
-        border-radius: 15px;
-        box-shadow: 0 4px 6px var(--shadow-color);
-    }
-
-    .timeline {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .timeline li {
-        padding: 10px;
-        border-left: 2px solid var(--secondary-color);
-        position: relative;
-        margin-bottom: 10px;
-    }
-
-    .timeline li::before {
-        content: '';
-        width: 12px;
-        height: 12px;
-        background-color: var(--secondary-color);
-        border-radius: 50%;
-        position: absolute;
-        left: -7px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .timeline li.passed {
-        border-left-color: var(--primary-color);
-    }
-
-    .timeline li.passed::before {
-        background-color: var(--primary-color);
-    }
-
-    #trackerLog ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    #trackerLog li {
-        margin-bottom: 5px;
-    }
 </style>
 </head>
 <body>
     <div class="container">
-        <button class="menu-button" onclick="toggleMenu()">⋮</button>
-        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+        <button class="menu-button" onclick="toggleMenu(event)">⋮</button>
+        <button class="theme-toggle" onclick="toggleTheme(event)">🌓</button>
         <div class="menu" id="menu">
             <label><input type="checkbox" id="showZeros" onchange="updateAge()"> הצג ערכי אפס</label>
             <label><input type="checkbox" id="showTotalHours" onchange="updateAge()"> הצג סך הכל שעות</label>
             <label><input type="checkbox" id="showMilestone" onchange="updateAge()"> הצג אבן דרך הבאה</label>
         </div>
-        <h1>הגיל של התינוקת היקרה שלי</h1>
+        <h1>הגיל של מיקה היקרה שלי</h1>
+        <p class="intro-text">נולדתי לפני</p>
         <div id="age"></div>
+        <p class="birth-info">תכלס?<br>
+נולדתי ב04.10.2024,<br>
+ב' תשרי תשפ"ה<br>
+בשעה 13:50</p>
         <div id="totalHours"></div>
         <div id="milestone"></div>
-        <div id="milestoneTimeline"></div>
     </div>
 
     <button id="congratsButton" onclick="congratulate()">לחיצה כאן לאיחול מזל טוב</button>
@@ -401,35 +366,13 @@
             return `${days} ימים, ${hours} שעות, ${minutes} דקות`;
         }
 
-        function updateMilestoneTimeline() {
-            const now = new Date();
-            const milestones = [
-                { date: new Date(birthDate.getTime() + 30 * 24 * 60 * 60 * 1000), description: "חודש ראשון" },
-                { date: new Date(birthDate.getTime() + 100 * 24 * 60 * 60 * 1000), description: "100 ימים" },
-                { date: new Date(birthDate.getTime() + 6 * 30 * 24 * 60 * 60 * 1000), description: "חצי שנה" },
-                { date: new Date(birthDate.getTime() + 365 * 24 * 60 * 60 * 1000), description: "יום הולדת ראשון" },
-            ];
-
-            let timelineHTML = '<ul class="timeline">';
-            milestones.forEach(milestone => {
-                const isPassed = now > milestone.date;
-                timelineHTML += `
-                    <li class="${isPassed ? 'passed' : ''}">
-                        ${milestone.description}: ${milestone.date.toLocaleDateString('he-IL')}
-                    </li>
-                `;
-            });
-            timelineHTML += '</ul>';
-
-            document.getElementById('milestoneTimeline').innerHTML = timelineHTML;
-        }
-
         let menuVisible = false;
 
-        function toggleMenu() {
+        function toggleMenu(event) {
             const menu = document.getElementById('menu');
             menuVisible = !menuVisible;
             menu.style.display = menuVisible ? 'block' : 'none';
+            event.stopPropagation();
         }
 
         document.addEventListener('click', function(event) {
@@ -457,8 +400,9 @@
             }
         }
 
-        function toggleTheme() {
+        function toggleTheme(event) {
             document.body.classList.toggle('dark-theme');
+            event.stopPropagation();
         }
 
         document.getElementById('showZeros').checked = false;
@@ -470,7 +414,13 @@
 
         function updateAllFeatures() {
             updateAge();
-            updateMilestoneTimeline();
         }
+        
+        document.getElementById('showZeros').checked = false;
+        document.getElementById('showTotalHours').checked = false;
+        document.getElementById('showMilestone').checked = false;
+
+        updateAllFeatures();
+        setInterval(updateAllFeatures, 1000);
     </script>
 </body></html>
